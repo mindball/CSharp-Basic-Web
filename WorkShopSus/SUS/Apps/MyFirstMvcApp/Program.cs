@@ -1,44 +1,17 @@
-﻿using System;
-using System.Net;
+﻿using SUS.HTTP;
+using System.Threading.Tasks;
 
 namespace MyFirstMvcApp
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
-            var server = new HttpServer();
-
-            server.Start(80);
-
-            server.AddRoute("/", (request) =>
-            {
-                return new HttpResponseHeader();
-            });
-
-
-
-            server.AddRoute("/", HomePage);
-
-            server.AddRoute("/about", About);
-
-            server.AddRoute("/users/login", Login);
+            IHttpServer server = new HttpServer();
+            
+            await server.StartAsync(8080);
 
         }
 
-        static HttpResponseHeader HomePage(HttpRequestHeader request)
-        {
-
-        }
-
-        static HttpResponseHeader About(HttpRequestHeader request)
-        {
-
-        }
-
-        static HttpResponseHeader Login(HttpRequestHeader request)
-        {
-
-        }
     }
 }

@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUS.MvcFramework", "SUS.Mvc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{80F2135E-BB4B-4820-A47B-C10202CBC12C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyFirstMvcApp", "MyFirstMvcApp\MyFirstMvcApp.csproj", "{B09AC92A-FEA9-47CE-8C44-68516865035D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyFirstMvcApp", "Apps\MyFirstMvcApp\MyFirstMvcApp.csproj", "{A9A62F54-D050-4CF2-BB43-C271FEEB371B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,16 +25,16 @@ Global
 		{66C39D17-2F71-48C2-8426-24CF52E19480}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66C39D17-2F71-48C2-8426-24CF52E19480}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66C39D17-2F71-48C2-8426-24CF52E19480}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B09AC92A-FEA9-47CE-8C44-68516865035D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B09AC92A-FEA9-47CE-8C44-68516865035D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B09AC92A-FEA9-47CE-8C44-68516865035D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B09AC92A-FEA9-47CE-8C44-68516865035D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9A62F54-D050-4CF2-BB43-C271FEEB371B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9A62F54-D050-4CF2-BB43-C271FEEB371B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9A62F54-D050-4CF2-BB43-C271FEEB371B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9A62F54-D050-4CF2-BB43-C271FEEB371B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B09AC92A-FEA9-47CE-8C44-68516865035D} = {80F2135E-BB4B-4820-A47B-C10202CBC12C}
+		{A9A62F54-D050-4CF2-BB43-C271FEEB371B} = {80F2135E-BB4B-4820-A47B-C10202CBC12C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9F3BAF69-93BA-4FC3-AA87-827F6102080C}

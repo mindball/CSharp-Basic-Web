@@ -12,19 +12,6 @@ namespace SUS.HTTP
         IDictionary<string, Func<HttpRequest, HttpResponse>>
             routeTable = new Dictionary<string, Func<HttpRequest, HttpResponse>>();
 
-
-        public void AddRoute(string path, Func<HttpRequest, HttpResponse> action)
-        {
-            if (routeTable.ContainsKey(path))
-            {
-                routeTable[path] = action;
-            }
-            else
-            {
-                routeTable.Add(path, action);
-            }
-        }
-
         public async Task StartAsync(int port)
         {
             TcpListener tcpListener = new TcpListener(IPAddress.Loopback, port);
@@ -69,12 +56,34 @@ namespace SUS.HTTP
                     }
                 }
 
+                var requestAsString = Encoding.UTF8.GetString(data.ToArray());
+                var request = new HttpRequest(requestAsString);
+                PrintRequest(request);
+
+                Console.WriteLine($"{request.Method} {request.Path} => {request.Headers.Count} headers");
+
+                // byte[] => string (text)
                 tcpClient.Close();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
+        }
+
+        private void PrintRequest(HttpRequest request)
+        {
+            Console.WriteLine($"Method: {request.Method}; Path: {request.Path}");
+            foreach (var header in request.Headers)
+            {
+                Console.WriteLine(header.ToString());
+            }
+
+            foreach (var cookie in request.Cookies)
+            {
+                Console.WriteLine(cookie.ToString());
+            }
+
         }
     }
 }
