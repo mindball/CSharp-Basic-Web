@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace SUS.HTTP
             TcpListener tcpListener = new TcpListener(IPAddress.Loopback, port);
             tcpListener.Start();
 
-            while(true)
+            while (true)
             {
                 var tcpClient = await tcpListener.AcceptTcpClientAsync();
                 ProcessClientAsync(tcpClient);
@@ -35,14 +36,14 @@ namespace SUS.HTTP
 
                 byte[] buffer = new byte[HttpConstants.BufferSize]; //chunk
 
-                while(true)
+                while (true)
                 {
                     int count =
                             await stream.ReadAsync(buffer, position, buffer.Length);
                     position += count;
 
                     //
-                    if(count < buffer.Length)
+                    if (count < buffer.Length)
                     {
                         var partialBuffer = new byte[count];
                         Array.Copy(buffer, partialBuffer, count);
@@ -56,13 +57,36 @@ namespace SUS.HTTP
                     }
                 }
 
+                // byte[] => string (text)
                 var requestAsString = Encoding.UTF8.GetString(data.ToArray());
                 var request = new HttpRequest(requestAsString);
                 PrintRequest(request);
 
                 Console.WriteLine($"{request.Method} {request.Path} => {request.Headers.Count} headers");
 
-                // byte[] => string (text)
+                HttpResponse response;
+                if (this.routeTable.ContainsKey(request.Path))
+                {
+                    var action = this.routeTable[request.Path];
+                    response = action(request);
+                }
+                else
+                {
+                    //Not found
+                    response = new HttpResponse("text/html", new byte[0], HttpStatusCode.NotFound);
+                }
+
+                response.Cookies.Add(new ResponseCookie("sid", Guid.NewGuid().ToString())
+                {
+                    HttpOnly = true,
+                    MaxAge = 60 * 24 * 60 * 60
+                });
+
+                response.Headers.Add(new Header("Server", "SUS Server 1.0"));
+                var responseHeaderBytes = Encoding.UTF8.GetBytes(response.ToString());
+                await stream.WriteAsync(responseHeaderBytes, 0, responseHeaderBytes.Length);
+                await stream.WriteAsync(response.Body, 0, response.Body.Length);
+
                 tcpClient.Close();
             }
             catch (Exception ex)
@@ -85,5 +109,23 @@ namespace SUS.HTTP
             }
 
         }
+
+        public void AddRoute(string path, Func<HttpRequest, HttpResponse> action)
+        {
+            if (this.routeTable.ContainsKey(path))
+            {
+                this.routeTable[path] = action;
+            }
+            else
+            {
+                this.routeTable.Add(path, action);
+            }
+        }
     }
 }
+
+
+
+
+    
+
