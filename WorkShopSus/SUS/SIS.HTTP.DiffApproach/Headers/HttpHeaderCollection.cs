@@ -25,14 +25,13 @@ namespace SIS.HTTP.DiffApproach.Headers
         public HttpHeader GetHeader(string key)
         {
             HttpHeader getHeader;
-           if(this.headers.TryGetValue(key, out getHeader))
+           
+            if(!this.headers.TryGetValue(key, out getHeader))
             {
-                return getHeader;
+                CoreValidator.ThrowIfNull(key, nameof(key));                
             }
-           else
-            {
-                return CoreValidator.ThrowIfNull(key, nameof(key));
-            }
+
+            return getHeader;
         }
 
         public override string ToString()
@@ -45,7 +44,18 @@ namespace SIS.HTTP.DiffApproach.Headers
                 //TODO: add last new line
             }
 
-            return str.ToString();
+            return str.ToString().TrimEnd();
+
+            /*
+             * Separator note. Join() places the separator between every 
+             * element of the collection in the returned string. The separator
+             * is not added to the start or end of the result.
+             * We can use string.Join to generate HTML. Often with HTML we need a 
+             * separating tag or element. Join helps because it does not insert the 
+             * separating tag at the end.
+             */
+            //string.Join("\r\n",
+            //       this.httpHeaders.Values.Select(header => header.ToString()));
         }
     }
 }
