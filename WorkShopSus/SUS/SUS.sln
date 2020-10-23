@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUS.HTTP", "SUS.HTTP\SUS.HTTP.csproj", "{8A0C04D6-23DF-4DE2-B9D6-0F6F65CE8140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUS.HTTP", "SUS.HTTP\SUS.HTTP.csproj", "{8A0C04D6-23DF-4DE2-B9D6-0F6F65CE8140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SUS.MvcFramework", "SUS.MvcFramework\SUS.MvcFramework.csproj", "{66C39D17-2F71-48C2-8426-24CF52E19480}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUS.MvcFramework", "SUS.MvcFramework\SUS.MvcFramework.csproj", "{66C39D17-2F71-48C2-8426-24CF52E19480}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{80F2135E-BB4B-4820-A47B-C10202CBC12C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyFirstMvcApp", "Apps\MyFirstMvcApp\MyFirstMvcApp.csproj", "{A9A62F54-D050-4CF2-BB43-C271FEEB371B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.HTTP.DiffApproach", "SIS.HTTP.DiffApproach\SIS.HTTP.DiffApproach.csproj", "{D556CF51-3F1A-4CAD-A821-CB941CCF9193}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo.TestRequest", "Demo.TestRequest\Demo.TestRequest.csproj", "{E70E0B6F-875A-48E4-8D59-2E0440E8BD41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +33,14 @@ Global
 		{A9A62F54-D050-4CF2-BB43-C271FEEB371B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A9A62F54-D050-4CF2-BB43-C271FEEB371B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A9A62F54-D050-4CF2-BB43-C271FEEB371B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D556CF51-3F1A-4CAD-A821-CB941CCF9193}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D556CF51-3F1A-4CAD-A821-CB941CCF9193}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D556CF51-3F1A-4CAD-A821-CB941CCF9193}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D556CF51-3F1A-4CAD-A821-CB941CCF9193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E70E0B6F-875A-48E4-8D59-2E0440E8BD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E70E0B6F-875A-48E4-8D59-2E0440E8BD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E70E0B6F-875A-48E4-8D59-2E0440E8BD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E70E0B6F-875A-48E4-8D59-2E0440E8BD41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

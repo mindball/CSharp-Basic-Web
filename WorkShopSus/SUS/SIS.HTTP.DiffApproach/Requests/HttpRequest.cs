@@ -97,12 +97,7 @@ namespace SIS.HTTP.DiffApproach.Requests
             
         }
 
-        private bool HasQueryString() => this.Url.Split('?').Length > 1;        
-
-        private object ParsePlainRequestHeaders(object splitRequestString)
-        {
-            throw new NotImplementedException();
-        }
+        private bool HasQueryString() => this.Url.Split('?').Length > 1;     
 
         private IEnumerable<string> ParsePlainRequestHeaders(string[] requestLines)
         {
@@ -155,13 +150,9 @@ namespace SIS.HTTP.DiffApproach.Requests
 
             //Headers
             this.ParseRequestHeaders(this.ParsePlainRequestHeaders(splitRequestContent).ToArray());            
+
+            //Request Body
             this.ParseRequestParameters(splitRequestContent[splitRequestContent.Length - 1]);
-
-            //Body
-
-
         }
-
-       
     }
 }

@@ -2,6 +2,7 @@
 using SIS.HTTP.DiffApproach.Headers.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace SIS.HTTP.DiffApproach.Headers
@@ -36,15 +37,15 @@ namespace SIS.HTTP.DiffApproach.Headers
 
         public override string ToString()
         {
-            StringBuilder str = new StringBuilder();
-            foreach (var header in this.headers)
-            {
-                str.Append(header.Key);
-                str.Append(GlobalConstants.HttpNewLine);
-                //TODO: add last new line
-            }
+            //StringBuilder str = new StringBuilder();
+            //foreach (var header in this.headers)
+            //{
+            //    str.Append(header.Key);
+            //    str.Append(GlobalConstants.HttpNewLine);
+            //    //TODO: add last new line
+            //}
 
-            return str.ToString().TrimEnd();
+            //return str.ToString().TrimEnd();
 
             /*
              * Separator note. Join() places the separator between every 
@@ -54,8 +55,10 @@ namespace SIS.HTTP.DiffApproach.Headers
              * separating tag or element. Join helps because it does not insert the 
              * separating tag at the end.
              */
-            //string.Join("\r\n",
-            //       this.httpHeaders.Values.Select(header => header.ToString()));
+            var result = string.Join("\r\n",
+                   this.headers.Values.Select(header => header.ToString()));
+
+            return result;
         }
     }
 }
