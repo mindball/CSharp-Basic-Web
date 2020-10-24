@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SIS.HTTP.DiffApproach\SIS.HTTP.DiffApproach.csproj" />
+    <ProjectReference Include="..\SIS.WebServer.DiffApproach\SIS.WebServer.DiffApproach.csproj" />
+  </ItemGroup>
+
+</Project>
