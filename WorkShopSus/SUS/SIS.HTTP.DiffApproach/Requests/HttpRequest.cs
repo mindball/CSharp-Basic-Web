@@ -15,7 +15,7 @@ namespace SIS.HTTP.DiffApproach.Requests
     {
         public HttpRequest(string requestString)
         {
-            CoreValidator.ThrowIfNullOrEmtpy(requestString, nameof(requestString));
+            CoreValidator.ThrowIfNullOrEmpty(requestString, nameof(requestString));
 
             this.FormData = new Dictionary<string, object>();
             this.QueryData = new Dictionary<string, object>();
@@ -49,7 +49,7 @@ namespace SIS.HTTP.DiffApproach.Requests
         {
             HttpRequestMethod requestMethod;
             bool isParsed =
-                Enum.TryParse<HttpRequestMethod>(requestLineParams[0], out requestMethod);
+                Enum.TryParse<HttpRequestMethod>(requestLineParams[0], true, out requestMethod);
 
             if (!isParsed)
             {

@@ -12,7 +12,7 @@ namespace SIS.HTTP.DiffApproach.Common
             }
         }
 
-        public static void ThrowIfNullOrEmtpy(string text, string name)
+        public static void ThrowIfNullOrEmpty(string text, string name)
         {
             if(string.IsNullOrEmpty(text))
             {

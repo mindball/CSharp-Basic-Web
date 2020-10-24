@@ -7,7 +7,7 @@ namespace SIS.HTTP.DiffApproach.Headers
         public HttpHeader(string key, string value)
         {
             CoreValidator.ThrowIfNull(key, nameof(key));
-            CoreValidator.ThrowIfNullOrEmtpy(value, nameof(value));
+            CoreValidator.ThrowIfNullOrEmpty(value, nameof(value));
 
             this.Key = key;
             this.Value = value;
