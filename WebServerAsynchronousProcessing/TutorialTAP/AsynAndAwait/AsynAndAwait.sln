@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30406.217
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AsynAndAwait", "AsynAndAwait\AsynAndAwait.csproj", "{8C045FE4-2F08-4505-B7E5-F29A08745238}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AsynAndAwait", "AsynAndAwait\AsynAndAwait.csproj", "{8C045FE4-2F08-4505-B7E5-F29A08745238}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpcornerDemo", "CSharpcornerDemo\CSharpcornerDemo.csproj", "{768A791D-0F87-4352-A242-55A3FB1A9F6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpcornerDemo", "CSharpcornerDemo\CSharpcornerDemo.csproj", "{768A791D-0F87-4352-A242-55A3FB1A9F6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetPerlDemo", "DotNetPerlDemo\DotNetPerlDemo.csproj", "{C8EDC747-A061-4D45-9F44-1A1DAD1BF01B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetPerlDemo2", "DotNetPerlDemo2\DotNetPerlDemo2.csproj", "{40CBFBC2-7D68-46CF-9399-39EFCEE97857}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetPerlDemo3Tasks", "DotNetPerlDemo3Tasks\DotNetPerlDemo3Tasks.csproj", "{AB27494B-BDFD-458D-9FE7-07D215012922}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Codingame.Demo", "Codingame.Demo\Codingame.Demo.csproj", "{A8897832-3452-4FE7-ADE6-2D52DFFDDF8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +29,22 @@ Global
 		{768A791D-0F87-4352-A242-55A3FB1A9F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{768A791D-0F87-4352-A242-55A3FB1A9F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{768A791D-0F87-4352-A242-55A3FB1A9F6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8EDC747-A061-4D45-9F44-1A1DAD1BF01B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8EDC747-A061-4D45-9F44-1A1DAD1BF01B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8EDC747-A061-4D45-9F44-1A1DAD1BF01B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8EDC747-A061-4D45-9F44-1A1DAD1BF01B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40CBFBC2-7D68-46CF-9399-39EFCEE97857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40CBFBC2-7D68-46CF-9399-39EFCEE97857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40CBFBC2-7D68-46CF-9399-39EFCEE97857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40CBFBC2-7D68-46CF-9399-39EFCEE97857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB27494B-BDFD-458D-9FE7-07D215012922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB27494B-BDFD-458D-9FE7-07D215012922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB27494B-BDFD-458D-9FE7-07D215012922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB27494B-BDFD-458D-9FE7-07D215012922}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8897832-3452-4FE7-ADE6-2D52DFFDDF8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8897832-3452-4FE7-ADE6-2D52DFFDDF8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8897832-3452-4FE7-ADE6-2D52DFFDDF8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8897832-3452-4FE7-ADE6-2D52DFFDDF8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
