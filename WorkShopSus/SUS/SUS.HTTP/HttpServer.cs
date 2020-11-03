@@ -42,7 +42,6 @@ namespace SUS.HTTP
                             await stream.ReadAsync(buffer, position, buffer.Length);
                     position += count;
 
-                    //
                     if (count < buffer.Length)
                     {
                         var partialBuffer = new byte[count];

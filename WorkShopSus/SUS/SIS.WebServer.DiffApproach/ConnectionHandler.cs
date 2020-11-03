@@ -3,7 +3,7 @@
     using System;
     using System.Net.Sockets;
     using System.Text;
-
+    using System.Threading.Tasks;
     using SIS.HTTP.DiffApproach.Common;
     using SIS.HTTP.DiffApproach.Enums;
     using SIS.HTTP.DiffApproach.Exceptions;
@@ -28,7 +28,7 @@
             this.serverRoutingTable = serverRoutingTable;
         }
 
-        private IHttpRequest ReadRequest()
+        private async Task<IHttpRequest> ReadRequestAsync()
         {
             // PARSE REQUEST FROM BYTE DATA
             var result = new StringBuilder();
@@ -36,7 +36,7 @@
 
             while (true)
             {
-                int numberOfBytesToRead = this.client.Receive(data.Array, SocketFlags.None);
+                int numberOfBytesToRead = await this.client.ReceiveAsync(data, SocketFlags.None);
 
                 if (numberOfBytesToRead == 0)
                 {
@@ -76,16 +76,16 @@
             // PREPARES RESPONSE -> MAPS IT TO BYTE DATA
             byte[] byteSegments = httpResponse.GetBytes();
 
-            this.client.Send(byteSegments, SocketFlags.None);
+            this.client.Send(byteSegments, SocketFlags.None);            
         }
 
-        public void ProcessRequest()
+        public async Task ProcessRequestAsync()
         {
             IHttpResponse httpResponse = null;
 
             try
             {
-                IHttpRequest httpRequest = this.ReadRequest();
+                IHttpRequest httpRequest = await this.ReadRequestAsync();
 
                 if (httpRequest != null)
                 {

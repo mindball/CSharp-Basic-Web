@@ -1,4 +1,5 @@
 ﻿using SIS.HTTP.DiffApproach.Common;
+using SIS.HTTP.DiffApproach.Cookies;
 using SIS.HTTP.DiffApproach.Enums;
 using SIS.HTTP.DiffApproach.Exceptions;
 using SIS.HTTP.DiffApproach.Headers;
@@ -22,6 +23,8 @@ namespace SIS.HTTP.DiffApproach.Requests
 
             this.Headers = new HttpHeaderCollection();
 
+            this.Cookies = new HttpCookieCollection();
+
             this.ParseRequest(requestString);
         }
 
@@ -32,6 +35,7 @@ namespace SIS.HTTP.DiffApproach.Requests
         public Dictionary<string, object> QueryData { get; private set; }
         public IHttpHeaderCollection Headers { get; private set; }
         public HttpRequestMethod RequestMethod { get; private set; }
+        public IHttpCookieCollection Cookies { get; }
 
         //Request line
         private bool IsValidateRequestLine(string[] requestLineParams)
@@ -76,15 +80,15 @@ namespace SIS.HTTP.DiffApproach.Requests
         private void ParseRequestHeaders(string[] plainHeaders)
         {
             plainHeaders.Select(plainHeader => plainHeader.Split(new[] { ':', ' ' }
-                ,StringSplitOptions.RemoveEmptyEntries))
+                , StringSplitOptions.RemoveEmptyEntries))
                 .ToList()
-                .ForEach(headerKeyValuePair => 
+                .ForEach(headerKeyValuePair =>
                     this.Headers.AddHeader(new HttpHeader(headerKeyValuePair[0], headerKeyValuePair[1])));
         }
 
         private void ParseRequestQueryParameters()
         {
-            if(this.HasQueryString())
+            if (this.HasQueryString())
             {
                 this.Url.Split('?', '#')[1]
                 .Split('&')
@@ -94,10 +98,10 @@ namespace SIS.HTTP.DiffApproach.Requests
                 .ForEach(queryParameterKeyValuePair =>
                     this.QueryData.Add(queryParameterKeyValuePair[0], queryParameterKeyValuePair[1]));
             }
-            
+
         }
 
-        private bool HasQueryString() => this.Url.Split('?').Length > 1;     
+        private bool HasQueryString() => this.Url.Split('?').Length > 1;
 
         private IEnumerable<string> ParsePlainRequestHeaders(string[] requestLines)
         {
@@ -116,11 +120,29 @@ namespace SIS.HTTP.DiffApproach.Requests
             this.ParseRequestFormDataParameters(requestBody); //TODO: Split
         }
 
+        private void ParseCookies()
+        {
+            if (this.Headers.ContainsHeader(HttpHeader.HttpHeaderCookie))
+            {
+                string value = this.Headers.GetHeader(HttpHeader.HttpHeaderCookie).Value;
+                string[] unparsedCookies = value.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (var unParseCookie in unparsedCookies)
+                {
+                    string[] cookieKeyValuePair = unParseCookie.Split(new[] { "; " }, StringSplitOptions.RemoveEmptyEntries);
+
+                    HttpCookie httpCookie = new HttpCookie(cookieKeyValuePair[0], cookieKeyValuePair[1], false);
+
+                    this.Cookies.AddCookie(httpCookie);
+                }
+            }
+        }
+
         //Body
         private void ParseRequestFormDataParameters(string requestBody)
         {
             if (!string.IsNullOrEmpty(requestBody))
-            {               
+            {
                 requestBody
                     .Split('&')
                     .Select(plainQueryParameter => plainQueryParameter.Split('='))
@@ -147,9 +169,10 @@ namespace SIS.HTTP.DiffApproach.Requests
             this.ParseRequestMethod(requestLine);
             this.ParseRequestUrl(requestLine);
             this.ParseRequestPath();
+            this.ParseCookies();
 
             //Headers
-            this.ParseRequestHeaders(this.ParsePlainRequestHeaders(splitRequestContent).ToArray());            
+            this.ParseRequestHeaders(this.ParsePlainRequestHeaders(splitRequestContent).ToArray());
 
             //Request Body
             this.ParseRequestParameters(splitRequestContent[splitRequestContent.Length - 1]);

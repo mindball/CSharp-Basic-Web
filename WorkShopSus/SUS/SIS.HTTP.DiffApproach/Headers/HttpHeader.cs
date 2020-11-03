@@ -4,6 +4,7 @@ namespace SIS.HTTP.DiffApproach.Headers
 {
     public class HttpHeader
     {
+        public const string HttpHeaderCookie = "Cookie";
         public HttpHeader(string key, string value)
         {
             CoreValidator.ThrowIfNull(key, nameof(key));

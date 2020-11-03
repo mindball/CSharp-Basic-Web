@@ -2,7 +2,7 @@
 
 namespace SIS.HTTP.DiffApproach.Cookies
 {
-    public interface IHttpCookieCollection : IEnumerator<HttpCookie>
+    public interface IHttpCookieCollection : IEnumerable<HttpCookie>
     {
         void AddCookie(HttpCookie cookie);
 

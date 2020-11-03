@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SIS.HTTP.DiffApproach.Cookies
 {
@@ -47,6 +48,19 @@ namespace SIS.HTTP.DiffApproach.Cookies
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+
+            var sb = new StringBuilder();
+
+            foreach (var cookie in this.cookies.Values)
+            {
+                sb.Append($"Set-cookie: {cookie}").Append(GlobalConstants.HttpNewLine);
+            }
+
+            return sb.ToString();
         }
     }
 }

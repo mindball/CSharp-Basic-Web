@@ -8,12 +8,9 @@ namespace SIS.HTTP.DiffApproach.Cookies
     {
         private const int HttpCookieDefaultExpirationDays = 3;
         private const string HttpCookieDefaultPath = "/";
-        private bool v;
-        private int expires;
-
+        
         public HttpCookie(string key, string value,
-            int expires = HttpCookieDefaultExpirationDays, string path = HttpCookieDefaultPath)
-            
+            int expires = HttpCookieDefaultExpirationDays, string path = HttpCookieDefaultPath)            
         {
             CoreValidator.ThrowIfNull(key, nameof(key));
             CoreValidator.ThrowIfNull(value, nameof(value));
@@ -26,7 +23,9 @@ namespace SIS.HTTP.DiffApproach.Cookies
             this.Path = path;
         }
 
-        public HttpCookie(string key, string value, bool isNew, int expires, string path)
+        public HttpCookie(string key, string value
+            , bool isNew, int expires = HttpCookieDefaultExpirationDays
+            , string path = HttpCookieDefaultPath)
             : this(key, value, expires, path)
         {            
             this.IsNew = isNew;           

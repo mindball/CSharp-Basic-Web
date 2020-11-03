@@ -1,6 +1,7 @@
 ﻿namespace SIS.HTTP.DiffApproach.Responses
 {
     using SIS.HTTP.DiffApproach.Common;
+    using SIS.HTTP.DiffApproach.Cookies;
     using SIS.HTTP.DiffApproach.Enums;
     using SIS.HTTP.DiffApproach.Extensions;
     using SIS.HTTP.DiffApproach.Headers;
@@ -9,12 +10,15 @@
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using System.Xml.XPath;
 
     public class HttpResponse : IHttpResponse
     {
         public HttpResponse()
         {
             this.Headers = new HttpHeaderCollection();
+            this.Cookies = new HttpCookieCollection();
+
             this.Content = new byte[0];
         }
 
@@ -24,12 +28,18 @@
             CoreValidator.ThrowIfNull(statusCode, nameof(statusCode));
             this.StatusCode = statusCode;
         }
-       
+
         public HttpResponseStatusCode StatusCode { get; set; }
 
         public IHttpHeaderCollection Headers { get; }
 
         public byte[] Content { get; set; }
+        public IHttpCookieCollection Cookies { get; }
+
+        public void AddCookie(HttpCookie cookie)
+        {
+            this.Cookies.AddCookie(cookie);
+        }
 
         public void AddHeader(HttpHeader header)
         {
@@ -65,6 +75,11 @@
                 .Append(GlobalConstants.HttpNewLine)
                 .Append($"{this.Headers}")
                 .Append(GlobalConstants.HttpNewLine);
+
+            if (this.Cookies.HasCookies())
+            {
+                result.Append($"{this.Cookies}").Append(GlobalConstants.HttpNewLine);
+            }
 
             result.Append(GlobalConstants.HttpNewLine);
 
