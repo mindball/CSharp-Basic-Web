@@ -5,6 +5,7 @@ using SIS.HTTP.DiffApproach.Exceptions;
 using SIS.HTTP.DiffApproach.Headers;
 using SIS.HTTP.DiffApproach.Headers.Contracts;
 using SIS.HTTP.DiffApproach.Requests.Contracts;
+using SIS.HTTP.DiffApproach.Sessions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,7 @@ namespace SIS.HTTP.DiffApproach.Requests
         public IHttpHeaderCollection Headers { get; private set; }
         public HttpRequestMethod RequestMethod { get; private set; }
         public IHttpCookieCollection Cookies { get; }
+        public IHttpSession Session { get; set; }
 
         //Request line
         private bool IsValidateRequestLine(string[] requestLineParams)

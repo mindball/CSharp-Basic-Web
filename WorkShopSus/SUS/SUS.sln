@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.HTTP.DiffApproach", "SI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.TestRequest", "Demo.TestRequest\Demo.TestRequest.csproj", "{E70E0B6F-875A-48E4-8D59-2E0440E8BD41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIS.WebServer.DiffApproach", "SIS.WebServer.DiffApproach\SIS.WebServer.DiffApproach.csproj", "{865167C1-C54C-436B-9A5A-6A5460D5EBAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.WebServer.DiffApproach", "SIS.WebServer.DiffApproach\SIS.WebServer.DiffApproach.csproj", "{865167C1-C54C-436B-9A5A-6A5460D5EBAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

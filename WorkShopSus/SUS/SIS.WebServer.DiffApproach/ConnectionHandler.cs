@@ -5,18 +5,19 @@
     using System.Text;
     using System.Threading.Tasks;
     using SIS.HTTP.DiffApproach.Common;
+    using SIS.HTTP.DiffApproach.Cookies;
     using SIS.HTTP.DiffApproach.Enums;
     using SIS.HTTP.DiffApproach.Exceptions;
     using SIS.HTTP.DiffApproach.Requests;
     using SIS.HTTP.DiffApproach.Requests.Contracts;
     using SIS.HTTP.DiffApproach.Responses.Contracts;
+    using SIS.WebServer.DiffApproach.Management;
     using SIS.WebServer.DiffApproach.Result;
     using SIS.WebServer.DiffApproach.Routing;
 
     public class ConnectionHandler
     {
         private readonly Socket client;
-
         private readonly IServerRoutingTable serverRoutingTable;
 
         public ConnectionHandler(Socket client, IServerRoutingTable serverRoutingTable)
@@ -79,6 +80,34 @@
             this.client.Send(byteSegments, SocketFlags.None);            
         }
 
+        private string SetRequestSession(IHttpRequest httpRequest)
+        {
+            string sessionId = null;
+
+            if(httpRequest.Cookies.ContainCookie(HttpSessionStorage.SessionCookieKey))
+            {
+                var cookie = httpRequest.Cookies.Cookie(HttpSessionStorage.SessionCookieKey);
+                sessionId = cookie.Value;               
+            }
+            else
+            {
+                sessionId = Guid.NewGuid().ToString();                
+            }
+
+            httpRequest.Session = HttpSessionStorage.GetSession(sessionId);
+
+            return httpRequest.Session.Id;
+        }
+
+        private void SetResponseSession(IHttpResponse httpResponse, string sessionId)
+        {
+            if(sessionId != null)
+            {
+                httpResponse
+                    .AddCookie(new HttpCookie(HttpSessionStorage.SessionCookieKey, sessionId));
+            }
+        }
+
         public async Task ProcessRequestAsync()
         {
             IHttpResponse httpResponse = null;
@@ -90,8 +119,9 @@
                 if (httpRequest != null)
                 {
                     Console.WriteLine($"Processing: {httpRequest.RequestMethod} {httpRequest.Path}...");
-
+                    var sessionId = this.SetRequestSession(httpRequest);
                     httpResponse = this.HandleRequest(httpRequest);
+                    this.SetResponseSession(httpResponse, sessionId);
                 }
             }
             catch (BadRequestException e)

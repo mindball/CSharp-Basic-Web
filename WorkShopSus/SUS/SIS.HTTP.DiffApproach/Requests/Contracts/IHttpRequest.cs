@@ -1,6 +1,7 @@
 ﻿using SIS.HTTP.DiffApproach.Cookies;
 using SIS.HTTP.DiffApproach.Enums;
 using SIS.HTTP.DiffApproach.Headers.Contracts;
+using SIS.HTTP.DiffApproach.Sessions;
 using System.Collections.Generic;
 
 namespace SIS.HTTP.DiffApproach.Requests.Contracts
@@ -20,5 +21,7 @@ namespace SIS.HTTP.DiffApproach.Requests.Contracts
         HttpRequestMethod RequestMethod { get; }
 
         IHttpCookieCollection Cookies { get; }
+
+        IHttpSession Session { get; set; }
     }
 }
