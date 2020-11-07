@@ -1,7 +1,5 @@
-﻿using SUS.HTTP;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using MyFirstMvcApp.Controllers;
+using SUS.HTTP;
 using System.Threading.Tasks;
 
 namespace MyFirstMvcApp
@@ -11,53 +9,20 @@ namespace MyFirstMvcApp
         static async Task Main(string[] args)
         {
             IHttpServer server = new HttpServer();
-            server.AddRoute("/", HomePage);
+            server.AddRoute("/", new HomeController().Index);
             //Example of store function()
             server.AddRoute("/niki", (httpRequest) =>
             {
                 return new HttpResponse("text/html", new byte[] { 0x56, 0x57 });
             });
 
-           
-            server.AddRoute("/about", About);
-            server.AddRoute("/users/login", Login);
+            server.AddRoute("/favicon.ico", new StaticFilesController().Favicon);
+
+            server.AddRoute("/about", new HomeController().About);
+            server.AddRoute("/users/login", new UserControleer().Login);
+            server.AddRoute("/users/register", new UserControleer().Register);
 
             await server.StartAsync(8080);
         }
-
-        static HttpResponse HomePage(HttpRequest request)
-        {
-            var responseHtml = "<h1>Welcome!</h1>" +
-                request.Headers.FirstOrDefault(x => x.Name == "User-Agent")?.Value;
-            var responseBodyBytes = Encoding.UTF8.GetBytes(responseHtml);
-            var response = new HttpResponse("text/html", responseBodyBytes);
-
-            return response;
-        }
-
-        static HttpResponse About(HttpRequest request)
-        {
-            var responseHtml = "<h1>About....../h1>";
-            var responseBodyBytes = Encoding.UTF8.GetBytes(responseHtml);
-            var response = new HttpResponse("text/html", responseBodyBytes);
-
-            return response;
-        }
-
-        static HttpResponse Login(HttpRequest request)
-        {
-            var responseHtml = "<h1>Login...</h1>";
-            var responseBodyBytes = Encoding.UTF8.GetBytes(responseHtml);
-            var response = new HttpResponse("text/html", responseBodyBytes);
-            return response;
-        }
-
-        static HttpResponse Favicon(HttpRequest request)
-        {
-            var fileBytes = File.ReadAllBytes("wwwroot/favicon.ico");
-            var response = new HttpResponse("image/vnd.microsoft.icon", fileBytes);
-            return response;
-        }
-
     }
 }
