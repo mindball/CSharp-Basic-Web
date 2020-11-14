@@ -2,6 +2,7 @@
 using SUS.MvcFramework.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -15,6 +16,7 @@ namespace SUS.MvcFramework
         {
             List<Route> routeTable = new List<Route>();
             AutoRegisterRoutes(application, routeTable);
+            AutoRegisterStaticRoutes(routeTable);
 
             application.ConfigureServices();
             application.Configure(routeTable);
@@ -22,6 +24,36 @@ namespace SUS.MvcFramework
             IHttpServer server = new HttpServer(routeTable);
 
             await server.StartAsync(port);
+        }
+
+        private static void AutoRegisterStaticRoutes(List<Route> routeTable)
+        {
+            var staticFiles = Directory.GetFiles("wwwroot", "*", SearchOption.AllDirectories);
+            foreach (var staticFile in staticFiles)
+            {
+                var url = staticFile.Replace("wwwroot", string.Empty).Replace("\\", "/");
+                routeTable.Add(new Route(url, HttpMethod.Get, (request) =>
+                    {
+                        var fileContent = File.ReadAllBytes(staticFile);
+                        var fileExtension = new FileInfo(staticFile).Extension;
+                        var contentType = fileExtension switch
+                        {
+                            ".txt" => "text/plain",
+                            ".js" => "text/javascript",
+                            ".css" => "text/css",
+                            ".jpg" => "image/jpg",
+                            ".jpeg" => "image/jpg",
+                            ".png" => "image/png",
+                            ".gif" => "image/plain",
+                            ".ico" => "image/vnd.microsoft.icon",
+                            ".html" => "text/html",
+                            _ => "text/plain"
+                        };
+
+                        return new HttpResponse(contentType, fileContent, HttpStatusCode.Ok);
+                    }
+                    ));
+            }
         }
 
         private static void AutoRegisterRoutes(IMvcApplication application, List<Route> routeTable)
