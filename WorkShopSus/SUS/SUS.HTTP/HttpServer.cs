@@ -63,15 +63,15 @@ namespace SUS.HTTP
 
                 // byte[] => string (text)
                 var requestAsString = Encoding.UTF8.GetString(data.ToArray());
-                var request = new HttpRequest(requestAsString);
-                PrintRequest(request);
+                var request = new HttpRequest(requestAsString);                
 
                 Console.WriteLine($"{request.Method} {request.Path} => {request.Headers.Count} headers");
 
                 HttpResponse response;
-                var route = this.routeTable
-                    .FirstOrDefault(x => string.Compare(x.UrlPath, request.Path, true) == 0
-                    && x.Method == request.Method);
+
+                var route = this.routeTable.FirstOrDefault(
+                        x => string.Compare(x.Path, request.Path, true) == 0
+                            && x.Method == request.Method);
 
                 if (route != null)
                 {                    
@@ -101,21 +101,7 @@ namespace SUS.HTTP
                 Console.WriteLine(ex);
             }
         }
-
-        private void PrintRequest(HttpRequest request)
-        {
-            Console.WriteLine($"Method: {request.Method}; Path: {request.Path}");
-            foreach (var header in request.Headers)
-            {
-                Console.WriteLine(header.ToString());
-            }
-
-            foreach (var cookie in request.Cookies)
-            {
-                Console.WriteLine(cookie.ToString());
-            }
-
-        }
+       
     }
 }
 

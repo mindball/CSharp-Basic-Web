@@ -7,14 +7,14 @@ namespace SUS.HTTP
 {
     public class Route
     {
-        public Route(string urlPath, HttpMethod method, Func<HttpRequest, HttpResponse> action)
+        public Route(string path, HttpMethod method, Func<HttpRequest, HttpResponse> action)
         {
-            this.UrlPath = urlPath;
+            this.Path = path;
             this.Action = action;
             this.Method = method;
         }     
 
-        public string UrlPath { get; set; }
+        public string Path { get; set; }
 
         public Func<HttpRequest, HttpResponse> Action { get; set; }
 

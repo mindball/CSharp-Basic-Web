@@ -15,96 +15,94 @@ namespace SUS.MvcFramework
         public static async Task CreateHostAsync(IMvcApplication application, int port)
         {
             List<Route> routeTable = new List<Route>();
+
+            AutoRegisterStaticFile(routeTable);
             AutoRegisterRoutes(application, routeTable);
-            AutoRegisterStaticRoutes(routeTable);
 
             application.ConfigureServices();
             application.Configure(routeTable);
+
+            Console.WriteLine("All registered routes:");
+            foreach (var route in routeTable)
+            {
+                Console.WriteLine($"{route.Method} {route.Path}");
+            }
 
             IHttpServer server = new HttpServer(routeTable);
 
             await server.StartAsync(port);
         }
 
-        private static void AutoRegisterStaticRoutes(List<Route> routeTable)
+        private static void AutoRegisterStaticFile(List<Route> routeTable)
         {
             var staticFiles = Directory.GetFiles("wwwroot", "*", SearchOption.AllDirectories);
             foreach (var staticFile in staticFiles)
             {
-                var url = staticFile.Replace("wwwroot", string.Empty).Replace("\\", "/");
+                var url = staticFile.Replace("wwwroot", string.Empty)
+                    .Replace("\\", "/");
                 routeTable.Add(new Route(url, HttpMethod.Get, (request) =>
+                {
+                    var fileContent = File.ReadAllBytes(staticFile);
+                    var fileExt = new FileInfo(staticFile).Extension;
+                    var contentType = fileExt switch
                     {
-                        var fileContent = File.ReadAllBytes(staticFile);
-                        var fileExtension = new FileInfo(staticFile).Extension;
-                        var contentType = fileExtension switch
-                        {
-                            ".txt" => "text/plain",
-                            ".js" => "text/javascript",
-                            ".css" => "text/css",
-                            ".jpg" => "image/jpg",
-                            ".jpeg" => "image/jpg",
-                            ".png" => "image/png",
-                            ".gif" => "image/plain",
-                            ".ico" => "image/vnd.microsoft.icon",
-                            ".html" => "text/html",
-                            _ => "text/plain"
-                        };
+                        ".txt" => "text/plain",
+                        ".js" => "text/javascript",
+                        ".css" => "text/css",
+                        ".jpg" => "image/jpg",
+                        ".jpeg" => "image/jpg",
+                        ".png" => "image/png",
+                        ".gif" => "image/gif",
+                        ".ico" => "image/vnd.microsoft.icon",
+                        ".html" => "text/html",
+                        _ => "text/plain",
+                    };
 
-                        return new HttpResponse(contentType, fileContent, HttpStatusCode.Ok);
-                    }
-                    ));
+                    return new HttpResponse(contentType, fileContent, HttpStatusCode.Ok);
+                }));
             }
         }
 
         private static void AutoRegisterRoutes(IMvcApplication application, List<Route> routeTable)
         {
-            var controllers = application.GetType()
-                .Assembly.GetTypes()
-                .Where(type => type.IsClass && !type.IsAbstract
-                        && typeof(Controller).IsAssignableFrom(type));
-
-            foreach (var controller in controllers)
+            var controllerTypes = application.GetType().Assembly.GetTypes()
+                .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(typeof(Controller)));
+            foreach (var controllerType in controllerTypes)
             {
-                var actions = controller.GetMethods(
-                    BindingFlags.DeclaredOnly
-                    | BindingFlags.Public
-                    | BindingFlags.Instance)
-                    .Where(method => !method.IsSpecialName && method.DeclaringType == controller);
-
-                foreach (var action in actions)
+                var methods = controllerType.GetMethods()
+                    .Where(x => x.IsPublic && !x.IsStatic && x.DeclaringType == controllerType
+                    && !x.IsAbstract && !x.IsConstructor && !x.IsSpecialName);
+                foreach (var method in methods)
                 {
-                    var actionName = controller.Name.Replace("Controller", string.Empty);
-                    string urlPath = $"/{actionName}/{action.Name}";
+                    var url = "/" + controllerType.Name.Replace("Controller", string.Empty)
+                        + "/" + method.Name;
 
-                    var attribute = (BaseHttpAttribute)action.GetCustomAttributes(typeof(BaseHttpAttribute)).FirstOrDefault(); ;
+                    var attribute = method.GetCustomAttributes(false)
+                        .Where(x => x.GetType().IsSubclassOf(typeof(BaseHttpAttribute)))
+                        .FirstOrDefault() as BaseHttpAttribute;
 
                     var httpMethod = HttpMethod.Get;
-                    
-                    if (attribute != null && attribute.Method == HttpMethod.Post)
+
+                    if (attribute != null)
                     {
-                        httpMethod = HttpMethod.Post;
+                        httpMethod = attribute.Method;
                     }
 
-                    if (attribute?.Url != null)
+                    if (!string.IsNullOrEmpty(attribute?.Url))
                     {
-                        urlPath = attribute.Url;
+                        url = attribute.Url;
                     }
 
-                    if (attribute?.ActionName != null)
+                    routeTable.Add(new Route(url, httpMethod, (request) =>
                     {
-                        urlPath = $"/{actionName}/{attribute.ActionName}";
-                    }
-
-                    routeTable.Add(new Route(urlPath, httpMethod, request =>
-                    {
-                        var controllerInstance = Activator.CreateInstance(controller);
-                        var response = action.Invoke(controllerInstance, new[] { request }) as HttpResponse;
+                        var instance = Activator.CreateInstance(controllerType) as Controller;
+                        instance.Request = request;
+                        var response = method.Invoke(instance, new object[] { }) as HttpResponse;
                         return response;
                     }));
-
-                    Console.WriteLine(httpMethod + " " + urlPath);
                 }
             }
+
         }
     }
 }

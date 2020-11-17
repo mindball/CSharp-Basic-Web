@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 
 namespace SUS.HTTP
@@ -12,6 +13,7 @@ namespace SUS.HTTP
         {
             this.Headers = new List<Header>();
             this.Cookies = new List<Cookie>();
+            this.FormData = new Dictionary<string, string>();
 
             //Parse requestAsString
             var lines = requestAsString.Split(new string[] { HttpConstants.NewLine },
@@ -31,13 +33,13 @@ namespace SUS.HTTP
                 var line = lines[lineIndex];
                 lineIndex++;
 
-                if(string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line))
                 {
                     isInHeaders = false;
                     continue;
                 }
 
-                if(isInHeaders)
+                if (isInHeaders)
                 {
                     this.Headers.Add(new Header(line));
                 }
@@ -47,7 +49,7 @@ namespace SUS.HTTP
                 }
             }
 
-            if(this.Headers.Any(x => x.Name == HttpConstants.RequestCookieHeader))
+            if (this.Headers.Any(x => x.Name == HttpConstants.RequestCookieHeader))
             {
                 var cookiesAsString = this.Headers.FirstOrDefault(x =>
                         x.Name == HttpConstants.RequestCookieHeader).Value;
@@ -60,7 +62,23 @@ namespace SUS.HTTP
                 }
             }
 
-            this.Body = bodyBuilder.ToString();
+            this.Body = bodyBuilder.ToString().TrimEnd('\n', '\r'); 
+            SplitParameters(this.Body, this.FormData);
+            //var bodyParameters = this.Body.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+
+            //foreach (var bodyParameter in bodyParameters)
+            //{
+            //    var keyValueData = bodyParameter.Split('=');
+
+            //    var keyFormData = keyValueData[0];
+            //    var valuFormData = WebUtility.UrlDecode(keyValueData[1]);
+
+            //    if (!this.FormData.ContainsKey(keyFormData))
+            //    {
+            //        this.FormData.Add(keyFormData, valuFormData);
+            //    }
+
+            //}
         }
 
         public string Path { get; set; }
@@ -71,6 +89,28 @@ namespace SUS.HTTP
 
         public ICollection<Cookie> Cookies { get; set; }
 
-        public string Body { get; set; }
+        public Dictionary<string, string> FormData { get; set; }
+
+        public string Body 
+        { 
+            get; 
+            set; 
+        }
+
+        private static void SplitParameters(string parametersAsString, IDictionary<string, string> output)
+        {
+
+            var parameters = parametersAsString.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var parameter in parameters)
+            {
+                var parameterParts = parameter.Split(new[] { '=' }, 2);
+                var name = parameterParts[0];
+                var value = WebUtility.UrlDecode(parameterParts[1]);
+                if (!output.ContainsKey(name))
+                {
+                    output.Add(name, value);
+                }
+            }
+        }
     }
 }

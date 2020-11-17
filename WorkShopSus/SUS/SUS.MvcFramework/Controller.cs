@@ -1,4 +1,5 @@
 ﻿using SUS.HTTP;
+using SUS.MvcFramework.ViewEngine;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -6,18 +7,30 @@ namespace SUS.MvcFramework
 {
     public abstract class Controller
     {
-        private const string slashSymbol = "/";
+       private SusViewEngine viewEngine;
 
-        public HttpResponse View([CallerMemberName] string viewPath = null)
+        public Controller()
         {
+            this.viewEngine = new SusViewEngine();
+        }
+
+        public  HttpRequest Request { get; set; }
+
+        public HttpResponse View(
+            object viewModel = null,
+            [CallerMemberName] string viewPath = null)
+        {
+            var viewContent = System.IO.File.ReadAllText(
+                 "Views/" +
+                 this.GetType().Name.Replace("Controller", string.Empty) +
+                 "/" + viewPath + ".cshtml");
+            viewContent = this.viewEngine.GetHtml(viewContent, viewModel);
+
             var layout = System.IO.File.ReadAllText("Views/Shared/_Layout.cshtml");
+            layout = layout.Replace("@RenderBody()", "____VIEW_GOES_HERE____");
+            layout = this.viewEngine.GetHtml(layout, viewModel);
 
-            string currentInstanceName = this.GetType().Name.Replace("Controller", string.Empty);
-
-            var viewContent = System.IO.File.ReadAllText("Views" + slashSymbol
-                + currentInstanceName + slashSymbol + viewPath + ".cshtml");
-
-            var responseHtml = layout.Replace("@RenderBody()", viewContent);
+            var responseHtml = layout.Replace("____VIEW_GOES_HERE____", viewContent);
 
             var responseBodyBytes = Encoding.UTF8.GetBytes(responseHtml);
             var response = new HttpResponse("text/html", responseBodyBytes);
