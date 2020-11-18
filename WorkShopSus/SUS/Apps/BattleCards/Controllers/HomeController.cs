@@ -12,7 +12,15 @@ namespace MyFirstMvcApp.Controllers
     {
         [HttpGet("/")]
         public HttpResponse Index()
-        {           
+        {
+            var viewModel = new IndexViewModel();
+            viewModel.CurrentYear = DateTime.UtcNow.Year;
+            viewModel.Message = "Welcome to Battle Cards";
+
+            if (this.Request.Session.ContainsKey("about"))
+            {
+                viewModel.Message += " YOU WERE ON THE ABOUT PAGE!";
+            }
             return this.View();
           
         }
@@ -21,6 +29,7 @@ namespace MyFirstMvcApp.Controllers
         [HttpGet("/about")]
         public HttpResponse About()
         {
+            this.Request.Session["about"] = "yes";
             return this.View();
         }
     }

@@ -9,13 +9,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUS.MvcFramework", "SUS.Mvc
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{80F2135E-BB4B-4820-A47B-C10202CBC12C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyFirstMvcApp", "Apps\MyFirstMvcApp\MyFirstMvcApp.csproj", "{A9A62F54-D050-4CF2-BB43-C271FEEB371B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BattleCards", "Apps\BattleCards\BattleCards.csproj", "{A9A62F54-D050-4CF2-BB43-C271FEEB371B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.HTTP.DiffApproach", "SIS.HTTP.DiffApproach\SIS.HTTP.DiffApproach.csproj", "{D556CF51-3F1A-4CAD-A821-CB941CCF9193}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Demo.TestRequest", "Demo.TestRequest\Demo.TestRequest.csproj", "{E70E0B6F-875A-48E4-8D59-2E0440E8BD41}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SIS.WebServer.DiffApproach", "SIS.WebServer.DiffApproach\SIS.WebServer.DiffApproach.csproj", "{865167C1-C54C-436B-9A5A-6A5460D5EBAE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SUS.MvcFramework.Tests", "SUS.MvcFramework.Tests\SUS.MvcFramework.Tests.csproj", "{6D005396-4C3B-4144-A980-918BAFAE44D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{865167C1-C54C-436B-9A5A-6A5460D5EBAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{865167C1-C54C-436B-9A5A-6A5460D5EBAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{865167C1-C54C-436B-9A5A-6A5460D5EBAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D005396-4C3B-4144-A980-918BAFAE44D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D005396-4C3B-4144-A980-918BAFAE44D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D005396-4C3B-4144-A980-918BAFAE44D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D005396-4C3B-4144-A980-918BAFAE44D6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

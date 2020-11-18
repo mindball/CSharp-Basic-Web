@@ -9,11 +9,14 @@ namespace SUS.HTTP
 {
     public class HttpRequest
     {
+        public static IDictionary<string, Dictionary<string, string>>
+            Sessions = new Dictionary<string, Dictionary<string, string>>();
+
         public HttpRequest(string requestAsString)
         {
             this.Headers = new List<Header>();
             this.Cookies = new List<Cookie>();
-            this.FormData = new Dictionary<string, string>();
+            this.FormData = new Dictionary<string, string>();           
 
             //Parse requestAsString
             var lines = requestAsString.Split(new string[] { HttpConstants.NewLine },
@@ -62,23 +65,28 @@ namespace SUS.HTTP
                 }
             }
 
+            var sessionCookie = this.Cookies
+                .FirstOrDefault(x => x.Name == HttpConstants.SessionCookieName);
+
+            if (sessionCookie == null)
+            {
+                var sessionId = Guid.NewGuid().ToString();
+                this.Session = new Dictionary<string, string>();
+                Sessions.Add(sessionId, this.Session);
+                this.Cookies.Add(new Cookie(HttpConstants.SessionCookieName, sessionId));
+            }
+            else if (!Sessions.ContainsKey(sessionCookie.Value))
+            {
+                this.Session = new Dictionary<string, string>();
+                Sessions.Add(sessionCookie.Value, this.Session);
+            }
+            else
+            {
+                this.Session = Sessions[sessionCookie.Value];
+            }
+
             this.Body = bodyBuilder.ToString().TrimEnd('\n', '\r'); 
-            SplitParameters(this.Body, this.FormData);
-            //var bodyParameters = this.Body.Split(new char[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
-
-            //foreach (var bodyParameter in bodyParameters)
-            //{
-            //    var keyValueData = bodyParameter.Split('=');
-
-            //    var keyFormData = keyValueData[0];
-            //    var valuFormData = WebUtility.UrlDecode(keyValueData[1]);
-
-            //    if (!this.FormData.ContainsKey(keyFormData))
-            //    {
-            //        this.FormData.Add(keyFormData, valuFormData);
-            //    }
-
-            //}
+            SplitParameters(this.Body, this.FormData);           
         }
 
         public string Path { get; set; }
@@ -90,6 +98,8 @@ namespace SUS.HTTP
         public ICollection<Cookie> Cookies { get; set; }
 
         public Dictionary<string, string> FormData { get; set; }
+
+        public Dictionary<string, string> Session { get; set; }
 
         public string Body 
         { 
