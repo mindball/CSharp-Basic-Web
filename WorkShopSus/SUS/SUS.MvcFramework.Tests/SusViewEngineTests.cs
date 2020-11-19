@@ -29,7 +29,7 @@ namespace SUS.MvcFramework.Tests
 
             IViewEngine viewEngine = new SusViewEngine();
             var view = File.ReadAllText($"ViewTests/{fileName}.html");
-            var result = viewEngine.GetHtml(view, viewModel);
+            var result = viewEngine.GetHtml(view, viewModel, null);
             var expectedResult = File.ReadAllText($"ViewTests/{fileName}.Result.html");
             Assert.Equal(expectedResult, result);
         }

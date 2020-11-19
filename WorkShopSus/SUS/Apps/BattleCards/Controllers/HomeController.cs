@@ -20,13 +20,5 @@ namespace MyFirstMvcApp.Controllers
 
             return this.View();
         }
-
-        // GET /home/about
-        [HttpGet("/about")]
-        public HttpResponse About()
-        {
-            this.SignIn("niki");
-            return this.View();
-        }
     }
 }

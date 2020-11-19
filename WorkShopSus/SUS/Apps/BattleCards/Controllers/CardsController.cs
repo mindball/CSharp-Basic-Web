@@ -15,12 +15,22 @@ namespace MyFirstMvcApp.Controllers
     {
         public HttpResponse Add()
         {
+            if(!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             return this.View();
         }
 
         [HttpPost("/Cards/Add")]
         public HttpResponse DoAdd()
         {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             var dbContext = new BattleCardDbContext();
 
             if(this.Request.FormData["name"].Length < 5)
@@ -40,10 +50,16 @@ namespace MyFirstMvcApp.Controllers
 
             dbContext.SaveChanges();
 
-            return this.Redirect("/");
+            return this.Redirect("/Cards/All");
         }
+
         public HttpResponse All()
         {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             var dbContext = new BattleCardDbContext();
 
             var cardsViewModel = dbContext.Cards.Select(x => new CardViewModel
@@ -61,6 +77,11 @@ namespace MyFirstMvcApp.Controllers
 
         public HttpResponse Collection()
         {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
             return this.View();
         }
     }
