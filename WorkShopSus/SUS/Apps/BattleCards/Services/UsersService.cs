@@ -12,9 +12,9 @@ namespace BattleCards.Services
     {
         private BattleCardDbContext db;
 
-        public UsersService()
+        public UsersService(BattleCardDbContext db)
         {
-            this.db = new BattleCardDbContext();
+            this.db = db;
         }
 
         public string CreateUser(string username, string email, string password)

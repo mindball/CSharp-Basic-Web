@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SUS.MvcFramework
@@ -15,12 +13,13 @@ namespace SUS.MvcFramework
         public static async Task CreateHostAsync(IMvcApplication application, int port)
         {
             List<Route> routeTable = new List<Route>();
+            var serviceCollection = new ServiceCollection();
+
+            application.ConfigureServices(serviceCollection);
+            application.Configure(routeTable);
 
             AutoRegisterStaticFile(routeTable);
-            AutoRegisterRoutes(application, routeTable);
-
-            application.ConfigureServices();
-            application.Configure(routeTable);
+            AutoRegisterRoutes(application, routeTable, serviceCollection);           
 
             Console.WriteLine("All registered routes:");
             foreach (var route in routeTable)
@@ -63,7 +62,9 @@ namespace SUS.MvcFramework
             }
         }
 
-        private static void AutoRegisterRoutes(IMvcApplication application, List<Route> routeTable)
+        private static void AutoRegisterRoutes(IMvcApplication application
+            , List<Route> routeTable
+            , ServiceCollection serviceCollection)
         {
             var controllerTypes = application.GetType().Assembly.GetTypes()
                 .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(typeof(Controller)));
@@ -95,14 +96,13 @@ namespace SUS.MvcFramework
 
                     routeTable.Add(new Route(url, httpMethod, (request) =>
                     {
-                        var instance = Activator.CreateInstance(controllerType) as Controller;
+                        var instance = serviceCollection.CreateInstance(controllerType) as Controller;
                         instance.Request = request;
                         var response = method.Invoke(instance, new object[] { }) as HttpResponse;
                         return response;
                     }));
                 }
             }
-
         }
     }
 }

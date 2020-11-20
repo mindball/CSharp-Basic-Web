@@ -1,4 +1,5 @@
 ﻿using BattleCards.Data;
+using BattleCards.Services;
 using Microsoft.EntityFrameworkCore;
 using MyFirstMvcApp.Controllers;
 using SUS.HTTP;
@@ -30,6 +31,13 @@ namespace MyFirstMvcApp
 
         public void ConfigureServices()
         {
+            
+        }
+
+        public void ConfigureServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<ICardsService, CardsService>();
             new BattleCardDbContext().Database.Migrate();
         }
     }
