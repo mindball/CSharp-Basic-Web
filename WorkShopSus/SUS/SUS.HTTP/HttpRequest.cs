@@ -17,6 +17,7 @@ namespace SUS.HTTP
             this.Headers = new List<Header>();
             this.Cookies = new List<Cookie>();
             this.FormData = new Dictionary<string, string>();           
+            this.QueryData = new Dictionary<string, string>();
 
             //Parse requestAsString
             var lines = requestAsString.Split(new string[] { HttpConstants.NewLine },
@@ -85,8 +86,20 @@ namespace SUS.HTTP
                 this.Session = Sessions[sessionCookie.Value];
             }
 
+            if(this.Path.Contains("?"))
+            {
+                var pathParts = this.Path.Split(new char[] { '?' }, 2);
+                this.Path = pathParts[0];
+                this.QueryString = pathParts[1];
+            }
+            else
+            {
+                this.QueryString = string.Empty;
+            }
+
             this.Body = bodyBuilder.ToString().TrimEnd('\n', '\r'); 
-            SplitParameters(this.Body, this.FormData);           
+            SplitParameters(this.Body, this.FormData);
+            SplitParameters(this.QueryString, this.QueryData);
         }
 
         public string Path { get; set; }
@@ -98,6 +111,10 @@ namespace SUS.HTTP
         public ICollection<Cookie> Cookies { get; set; }
 
         public Dictionary<string, string> FormData { get; set; }
+
+        public string QueryString { get; set; }
+
+        public Dictionary<string, string> QueryData { get; set; }
 
         public Dictionary<string, string> Session { get; set; }
 

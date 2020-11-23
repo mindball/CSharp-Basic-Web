@@ -83,7 +83,6 @@ namespace SUS.HTTP
                     response = new HttpResponse("text/html", new byte[0], HttpStatusCode.NotFound);
                 }
 
-
                 response.Headers.Add(new Header("Server", "SUS Server 1.0"));
 
                 var sessionCookie = request.Cookies.FirstOrDefault(x => x.Name == HttpConstants.SessionCookieName);
@@ -102,7 +101,6 @@ namespace SUS.HTTP
                     await stream.WriteAsync(response.Body, 0, response.Body.Length);
                 }
                 
-
                 tcpClient.Close();
             }
             catch (Exception ex)

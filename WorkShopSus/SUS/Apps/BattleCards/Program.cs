@@ -4,7 +4,7 @@ using SUS.MvcFramework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MyFirstMvcApp
+namespace BattleCards
 {
     class Program
     {

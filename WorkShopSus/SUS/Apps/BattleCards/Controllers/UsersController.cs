@@ -1,9 +1,7 @@
-﻿using SUS.HTTP;
+﻿using BattleCards.Services;
+using SUS.HTTP;
 using SUS.MvcFramework;
 using SUS.MvcFramework.Attributes;
-using System.Text;
-using BattleCards.Services;
-using SUS.HTTP;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 

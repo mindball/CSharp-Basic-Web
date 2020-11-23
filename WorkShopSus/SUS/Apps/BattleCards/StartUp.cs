@@ -1,12 +1,11 @@
 ﻿using BattleCards.Data;
 using BattleCards.Services;
 using Microsoft.EntityFrameworkCore;
-using MyFirstMvcApp.Controllers;
 using SUS.HTTP;
 using SUS.MvcFramework;
 using System.Collections.Generic;
 
-namespace MyFirstMvcApp
+namespace BattleCards
 {
     public class StartUp : IMvcApplication
     {
