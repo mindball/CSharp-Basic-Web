@@ -1,4 +1,5 @@
 ﻿using BattleCards.Services;
+using BattleCards.ViewModels.Users;
 using SUS.HTTP;
 using SUS.MvcFramework;
 using SUS.MvcFramework.Attributes;
@@ -37,15 +38,13 @@ namespace MyFirstMvcApp.Controllers
         }
 
         [HttpPost("/Users/Login")]
-        public HttpResponse DoLogin()
+        public HttpResponse DoLogin(string username, string password)
         {
             if (this.IsUserSignedIn())
             {
                 return this.Redirect("/");
             }
 
-            var username = this.Request.FormData["username"];
-            var password = this.Request.FormData["password"];
             var userId = this.usersService.GetUserId(username, password);
 
             if(userId == null)
@@ -58,54 +57,49 @@ namespace MyFirstMvcApp.Controllers
         }
 
         [HttpPost("/Users/Register")]
-        public HttpResponse DoRegister()
+        public HttpResponse DoRegister(RegisterUserViewModel  registerUser)
         {
             if (this.IsUserSignedIn())
             {
                 return this.Redirect("/");
             }
 
-            var username = this.Request.FormData["username"];
-            var email = this.Request.FormData["email"];
-            var password = this.Request.FormData["password"];
-            var confirmPassword = this.Request.FormData["confirmPassword"];
-
-            if (username == null || username.Length < 5 || username.Length > 20)
+            if (registerUser.Username == null || registerUser.Username.Length < 5 || registerUser.Username.Length > 20)
             {
                 return this.Error("Invalid username. The username should be between 5 and 20 characters.");
             }
 
-            if (!Regex.IsMatch(username, @"^[a-zA-Z0-9\.]+$"))
+            if (!Regex.IsMatch(registerUser.Username, @"^[a-zA-Z0-9\.]+$"))
             {
                 return this.Error("Invalid username. Only alphanumeric characters are allowed.");
             }
 
-            if (string.IsNullOrWhiteSpace(email) || !new EmailAddressAttribute().IsValid(email))
+            if (string.IsNullOrWhiteSpace(registerUser.Email) || !new EmailAddressAttribute().IsValid(registerUser.Email))
             {
                 return this.Error("Invalid email.");
             }
 
-            if (password == null || password.Length < 6 || password.Length > 20)
+            if (registerUser.Password == null || registerUser.Password.Length < 6 || registerUser.Password.Length > 20)
             {
                 return this.Error("Invalid password. The password should be between 6 and 20 characters.");
             }
 
-            if (password != confirmPassword)
+            if (registerUser.Password != registerUser.ConfirmPassword)
             {
                 return this.Error("Passwords should be the same.");
             }
 
-            if (!this.usersService.IsUsernameAvailable(username))
+            if (!this.usersService.IsUsernameAvailable(registerUser.Username))
             {
                 return this.Error("Username already taken.");
             }
 
-            if (!this.usersService.IsEmailAvailable(email))
+            if (!this.usersService.IsEmailAvailable(registerUser.Password))
             {
                 return this.Error("Email already taken.");
             }
 
-            this.usersService.CreateUser(username, email, password);
+            this.usersService.CreateUser(registerUser.Username, registerUser.Email, registerUser.Password);
             return this.Redirect("/Users/Login");
         }
 

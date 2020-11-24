@@ -26,6 +26,7 @@ namespace BattleCards
             //routeTable.Add(new Route("/cards/all", HttpMethod.Get, new CardsController().All));
             //routeTable.Add(new Route("/cards/add", HttpMethod.Get, new CardsController().Add));
             //routeTable.Add(new Route("/cards/Collection", HttpMethod.Get, new CardsController().Collection));
+            new BattleCardDbContext().Database.Migrate();
         }
 
         public void ConfigureServices()
@@ -37,7 +38,7 @@ namespace BattleCards
         {
             serviceCollection.Add<IUsersService, UsersService>();
             serviceCollection.Add<ICardsService, CardsService>();
-            new BattleCardDbContext().Database.Migrate();
+            
         }
     }
 }

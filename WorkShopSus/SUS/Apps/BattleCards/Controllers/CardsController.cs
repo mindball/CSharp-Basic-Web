@@ -1,5 +1,5 @@
 ﻿using BattleCards.Data;
-using BattleCards.ViewModels;
+using BattleCards.ViewModels.Cards;
 using SUS.HTTP;
 using SUS.MvcFramework;
 using SUS.MvcFramework.Attributes;
@@ -26,7 +26,7 @@ namespace MyFirstMvcApp.Controllers
         }
 
         [HttpPost("/Cards/Add")]
-        public HttpResponse DoAdd()
+        public HttpResponse DoAdd(AddCardInputModel model)
         {
             if (!this.IsUserSignedIn())
             {
@@ -38,17 +38,17 @@ namespace MyFirstMvcApp.Controllers
                 return this.Error("Name should be at least 5 characters long.");
             }
 
-            db.Cards.Add(new Card
+            this.db.Cards.Add(new Card
             {
-                Attack = int.Parse(this.Request.FormData["attack"]),
-                Health = int.Parse(this.Request.FormData["health"]),
-                Description = this.Request.FormData["description"],
-                Name = this.Request.FormData["name"],
-                ImageUrl = this.Request.FormData["image"],
-                Keyword = this.Request.FormData["keyword"]
+                Attack = model.Attack,
+                Health = model.Health,
+                Description = model.Description,
+                Name = model.Name,
+                ImageUrl = model.Image,
+                Keyword = model.Keyword
             });
 
-            db.SaveChanges();
+            this.db.SaveChanges();
 
             return this.Redirect("/Cards/All");
         }
@@ -60,7 +60,7 @@ namespace MyFirstMvcApp.Controllers
                 return this.Redirect("/Users/Login");
             }           
 
-            var cardsViewModel = db.Cards.Select(x => new CardViewModel
+            var cardsViewModel = this.db.Cards.Select(x => new CardViewModel
             {
                 Name = x.Name,
                 Description = x.Description,

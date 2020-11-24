@@ -14,7 +14,7 @@ namespace SUS.MvcFramework
         public static async Task CreateHostAsync(IMvcApplication application, int port)
         {
             List<Route> routeTable = new List<Route>();
-            var serviceCollection = new ServiceCollection();
+            IServiceCollection serviceCollection = new ServiceCollection();
 
             application.ConfigureServices(serviceCollection);
             application.Configure(routeTable);
@@ -65,7 +65,7 @@ namespace SUS.MvcFramework
 
         private static void AutoRegisterRoutes(IMvcApplication application
             , List<Route> routeTable
-            , ServiceCollection serviceCollection)
+            , IServiceCollection serviceCollection)
         {
             var controllerTypes = application.GetType().Assembly.GetTypes()
                 .Where(x => x.IsClass && !x.IsAbstract && x.IsSubclassOf(typeof(Controller)));
@@ -108,26 +108,47 @@ namespace SUS.MvcFramework
             instance.Request = request;
             var arguments = new List<object>();
             var parameters = action.GetParameters();
+
             foreach (var parameter in parameters)
             {
-                var paramerValue = GetParameterFromRequest(request, parameter.Name);
-                arguments.Add(paramerValue);
+                var httpParamerValue = GetParameterFromRequest(request, parameter.Name);
+                var parameterValue = Convert.ChangeType(httpParamerValue, parameter.ParameterType);
+
+                // check is complex type 
+                if (parameterValue == null && parameter.ParameterType != typeof(string))
+                {
+                    // complex type
+                    parameterValue = Activator.CreateInstance(parameter.ParameterType);
+                    var properties = parameter.ParameterType.GetProperties();
+                    foreach (var property in properties)
+                    {
+                        var propertyHttpParamerValue = GetParameterFromRequest(request, property.Name);
+                        var propertyParameterValue = Convert.ChangeType(propertyHttpParamerValue, property.PropertyType);
+                        property.SetValue(parameterValue, propertyParameterValue);
+                    }
+                }
+
+                arguments.Add(parameterValue);
             }
 
             var response = action.Invoke(instance, arguments.ToArray()) as HttpResponse;
             return response;
         }
 
-        private static object GetParameterFromRequest(HttpRequest request, string parameterName)
+        private static string GetParameterFromRequest(HttpRequest request, string parameterName)
         {
-            if (request.FormData.ContainsKey(parameterName))
+            parameterName = parameterName.ToLower();
+
+            if (request.FormData.Any(x => x.Key.ToLower() == parameterName))
             {
-                return request.FormData[parameterName];
+                return request.FormData
+                    .FirstOrDefault(x => x.Key.ToLower() == parameterName).Value;
             }
 
-            if (request.QueryData.ContainsKey(parameterName))
+            if (request.QueryData.Any(x => x.Key.ToLower() == parameterName))
             {
-                return request.QueryData[parameterName];
+                return request.QueryData
+                    .FirstOrDefault(x => x.Key.ToLower() == parameterName).Value;
             }
 
             return null;
