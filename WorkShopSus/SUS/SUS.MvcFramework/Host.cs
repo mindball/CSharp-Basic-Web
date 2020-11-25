@@ -115,7 +115,9 @@ namespace SUS.MvcFramework
                 var parameterValue = Convert.ChangeType(httpParamerValue, parameter.ParameterType);
 
                 // check is complex type 
-                if (parameterValue == null && parameter.ParameterType != typeof(string))
+                if (parameterValue == null 
+                    && parameter.ParameterType != typeof(string)
+                    && parameter.ParameterType != typeof(int?))
                 {
                     // complex type
                     parameterValue = Activator.CreateInstance(parameter.ParameterType);

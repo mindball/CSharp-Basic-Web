@@ -103,7 +103,6 @@ namespace MyFirstMvcApp.Controllers
             return this.Redirect("/Users/Login");
         }
 
-
         public HttpResponse Logout()
         {
             if (!this.IsUserSignedIn())

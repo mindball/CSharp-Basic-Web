@@ -2,6 +2,6 @@
 {
     public interface ICardsService
     {
-        void AddCard();
+        void AddCard();       
     }
 }
