@@ -18,7 +18,7 @@ namespace MyFirstMvcApp.Controllers
         }
         public HttpResponse Add()
         {
-            if(!this.IsUserSignedIn())
+            if (!this.IsUserSignedIn())
             {
                 return this.Redirect("/Users/Login");
             }
@@ -32,9 +32,9 @@ namespace MyFirstMvcApp.Controllers
             if (!this.IsUserSignedIn())
             {
                 return this.Redirect("/Users/Login");
-            }            
+            }
 
-            if(this.Request.FormData["name"].Length < 5)
+            if (this.Request.FormData["name"].Length < 5)
             {
                 return this.Error("Name should be at least 5 characters long.");
             }
@@ -85,66 +85,58 @@ namespace MyFirstMvcApp.Controllers
                     ImageUrl = c.Card.ImageUrl,
                     Type = c.Card.Keyword
                 })
-                .ToList();                
+                .ToList();
 
             return this.View(currentUserCardsViewModel);
         }
 
-        public HttpResponse AddToCollection()
+        public HttpResponse AddToCollection(int cardId)
         {
             if (!this.IsUserSignedIn())
             {
                 return this.Redirect("/Users/Login");
-            }           
-           
-            foreach (var card in this.Request.QueryData)
-            {
-                int cardId = int.Parse(card.Value);
-                var userId = this.GetUserId();
-
-                if (this.db.UsersCards
-                    .Any(uc => uc.CardId == cardId && uc.UserId == userId))
-                {
-                    return this.Error("The curent user have this card");
-                }
-
-                this.db.UsersCards.Add(new UserCard()
-                {
-                    CardId = cardId,
-                    UserId = userId
-                });
             }
+
+            var userId = this.GetUserId();
+
+            if (this.db.UsersCards
+                .Any(uc => uc.CardId == cardId && uc.UserId == userId))
+            {
+                return this.Error("The curent user have this card");
+            }
+
+            this.db.UsersCards.Add(new UserCard()
+            {
+                CardId = cardId,
+                UserId = userId
+            });
 
             db.SaveChanges();
 
             return this.Redirect("/Cards/All");
         }
 
-        public HttpResponse RemoveFromCollection()
+        public HttpResponse RemoveFromCollection(int cardId)
         {
             if (!this.IsUserSignedIn())
             {
                 return this.Redirect("/Users/Login");
-            }
+            }            
+            
+            var userId = this.GetUserId();
 
-            foreach (var card in this.Request.QueryData)
+            var entity = this.db.UsersCards.FirstOrDefault(uc => uc.CardId == cardId && uc.UserId == userId);
+            if (entity == null)
             {
-                int cardId = int.Parse(card.Value);
-                var userId = this.GetUserId();
-                
-                var entity = this.db.UsersCards.FirstOrDefault(uc => uc.CardId == cardId && uc.UserId == userId);
-                if(entity == null)
-                {
-                    return this.Error("The card not exitst");
-                }
-
-                this.db.UsersCards.Remove(entity);
-                this.db.SaveChanges();
+                return this.Error("The card not exitst");
             }
+
+            this.db.UsersCards.Remove(entity);
+            this.db.SaveChanges();
+            
 
             return this.Redirect("/Cards/Collection");
         }
-
 
         private ICollection<CardViewModel> GetCardViewModel()
         {
@@ -157,7 +149,7 @@ namespace MyFirstMvcApp.Controllers
                 Health = x.Health,
                 ImageUrl = x.ImageUrl,
                 Type = x.Keyword
-            }).ToList();            
+            }).ToList();
         }
     }
 }

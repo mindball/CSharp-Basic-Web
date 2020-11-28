@@ -7,7 +7,7 @@ namespace App
     {
         public static async Task  Main()
         {
-            await Host.CreateHostAsync(new StartUp(), 8080);
+            await Host.CreateHostAsync(new StartUp(), 8000);
         }
     }
 }
