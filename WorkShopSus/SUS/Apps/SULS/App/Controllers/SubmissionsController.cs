@@ -53,5 +53,17 @@ namespace App.Controllers
 
             return this.Redirect("/");
         }
+
+        public HttpResponse Delete(string submissionId)
+        {
+            if (!this.IsUserSignedIn())
+            {
+                return this.Redirect("/Users/Login");
+            }
+
+            this.submissionService.Delete(submissionId);
+
+            return this.Redirect("/");
+        }
     }
 }
