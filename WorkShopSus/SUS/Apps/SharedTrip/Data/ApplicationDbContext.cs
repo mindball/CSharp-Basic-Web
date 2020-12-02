@@ -20,7 +20,7 @@
 
         public DbSet<Trip> Trips { get; set; }
 
-        public DbSet<User> UsersTrips { get; set; }
+        public DbSet<UserTrips> UsersTrips { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

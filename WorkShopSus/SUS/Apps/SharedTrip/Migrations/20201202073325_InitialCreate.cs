@@ -25,7 +25,7 @@ namespace SharedTrip.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -35,11 +35,11 @@ namespace SharedTrip.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserTrips",
+                name: "UsersTrips",
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -48,37 +48,37 @@ namespace SharedTrip.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserTrips", x => new { x.UserId, x.TripId });
+                    table.PrimaryKey("PK_UsersTrips", x => new { x.UserId, x.TripId });
                     table.ForeignKey(
-                        name: "FK_UserTrips_Trips_TripId",
+                        name: "FK_UsersTrips_Trips_TripId",
                         column: x => x.TripId,
                         principalTable: "Trips",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserTrips_User_UserId",
+                        name: "FK_UsersTrips_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserTrips_TripId",
-                table: "UserTrips",
+                name: "IX_UsersTrips_TripId",
+                table: "UsersTrips",
                 column: "TripId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "UserTrips");
+                name: "UsersTrips");
 
             migrationBuilder.DropTable(
                 name: "Trips");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

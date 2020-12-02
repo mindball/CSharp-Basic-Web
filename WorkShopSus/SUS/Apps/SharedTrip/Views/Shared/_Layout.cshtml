@@ -15,40 +15,47 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Users/Login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Users/Register">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Trips/All">Trips</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Trips/Add">Add</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Users/Logout">Logout</a>
-                    </li>
+                    @if (User == null)
+                    {
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Users/Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Users/Register">Register</a>
+                            }
+                    @else
+                            {
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Trips/All">Trips</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Trips/Add">Add</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Users/Logout">Logout</a>
+                        </li>
+                    }
+
                 </ul>
+                </div>
             </div>
+        </nav>
+        <div class="top-border-line primary-separator"></div>
+        <div class="container-fluid">
+            @RenderBody()
         </div>
-    </nav>
-    <div class="top-border-line primary-separator"></div>
-    <div class="container-fluid">
-        @RenderBody()
-    </div>
-    <div class="bottom-border-line primary-separator"></div>
-    <div class="container">
-        <footer id="sticky-footer" class="py-5 bg-dark">
-            <div class="container">
-                <p class="m-0 text-center text-white">Copyright © Shared Trip 2020</p>
-            </div>
-            <div></div>
-        </footer>
-    </div>
-</body>
+        <div class="bottom-border-line primary-separator"></div>
+        <div class="container">
+            <footer id="sticky-footer" class="py-5 bg-dark">
+                <div class="container">
+                    <p class="m-0 text-center text-white">Copyright © Shared Trip 2020</p>
+                </div>
+                <div></div>
+            </footer>
+        </div>
+    </body>
 </html>

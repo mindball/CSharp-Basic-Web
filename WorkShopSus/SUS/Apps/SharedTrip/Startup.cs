@@ -6,6 +6,8 @@
     using SUS.HTTP;
     using SUS.MvcFramework;
 
+    using Services;
+
     public class Startup : IMvcApplication
     {
 
@@ -16,7 +18,8 @@
 
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
-            
+            serviceCollection.Add<IUsersService, UsersService>();
+            serviceCollection.Add<ITripsService, TripsService>();
         }
     }
 }
