@@ -15,8 +15,11 @@ namespace SharedTrip.ViewModels.Trips
 
         public DateTime DepartureTime { get; set; }
 
+        //auxiliary field ор Computed property
         public string DepartureTimeAsString => this.DepartureTime.ToString(CultureInfo.GetCultureInfo("bg-BG"));
 
+        // Computed property
+        //Good practice: Get available data from DB (Seats and UsedSeat) then calculate AvailableSeats
         public int AvailableSeats => this.Seats - this.UsedSeats;
 
         public sbyte Seats { get; set; }
